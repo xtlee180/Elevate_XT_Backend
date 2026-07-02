@@ -3,11 +3,11 @@ from urllib.request import Request
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.schemas.auth import LoginRequest
 from app.services.auth_service import login as login_service
 from app.db.session import get_db
 from app.core.security import get_current_user
 from app.models.user import User
+from fastapi.security import OAuth2PasswordRequestForm
 
 
 router = APIRouter(
@@ -15,9 +15,13 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
-@router.post("/login",)
-def login(request: LoginRequest, db: Session = Depends(get_db)):
-    return login_service(db, request)
+@router.post("/login")
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    return login_service(db, email=form_data.username, password=form_data.password)
+
 
 @router.get("/me")
 def get_me(current_user: User = Depends(get_current_user)):

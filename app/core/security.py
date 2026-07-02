@@ -9,6 +9,8 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.models.user import User
+import os
+from dotenv import load_dotenv
 
 # 1. Password hashing setup
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
@@ -19,8 +21,9 @@ def verify_password(plain_password, hashed_password):
 def hash_password(password):
     return pwd_context.hash(password) # hash the password before saving
 
+load_dotenv()
 # 2. JWT setup
-SECRET_KEY = "YOUR_SECRET_KEY"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
