@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1 import users
 from app.api.v1.auth_router import router as auth_router
+from app.api.v1 import projects
 
 
 app = FastAPI(
@@ -26,3 +27,5 @@ def root():
 app.include_router(users.router, prefix="/users", tags=["Users"])
 
 app.include_router(auth_router)
+
+app.include_router(projects.router)
